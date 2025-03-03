@@ -17,7 +17,6 @@ export default async function handler(
     }
   } else if (req.method === "POST") {
     try {
-      console.log("body", req.body);
       const asset = await create(req.body);
       res.status(201).json(asset);
     } catch {

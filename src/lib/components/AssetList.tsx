@@ -1,5 +1,5 @@
 import React from "react";
-import { Asset } from "@/lib/models/asset";
+import { Asset } from "@/lib/models";
 import styles from "./assetList.module.css";
 
 type Props = {
@@ -20,7 +20,7 @@ export const AssetList: React.FC<Props> = ({ assets }) => {
       <tbody>
         {assets?.map((asset: Asset) => (
           <tr key={asset.id}>
-            <td>{asset.company.id}</td>
+            <td>{asset?.companyId}</td>
             <td>{asset.address}</td>
             <td>{asset.latitude}</td>
             <td>{asset.longitude}</td>

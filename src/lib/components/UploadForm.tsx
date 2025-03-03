@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Asset } from "@/lib/models/asset";
+import { Asset } from "@/lib/models";
 import { readCsvFile, readJsonFile } from "@/lib/utils";
 import styles from "./uploadForm.module.css";
 
@@ -24,11 +24,9 @@ export const UploadForm: React.FC<Props> = ({ isOpen, onClose }) => {
 
     if (selectedFile && selectedFile.type === "application/json") {
       const parseData = await readJsonFile(selectedFile);
-      console.log(parseData);
       setData(parseData as Asset[]);
     } else if (selectedFile && selectedFile.type === "text/csv") {
       const parseData = await readCsvFile(selectedFile);
-      console.log(parseData);
       setData(parseData as Asset[]);
     } else {
       alert("Please upload a file in JSON or CSV format.");

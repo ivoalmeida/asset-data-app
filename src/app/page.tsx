@@ -2,7 +2,7 @@
 import React from "react";
 import { useSearchParams } from 'next/navigation';
 import styles from "./page.module.css";
-import { Asset } from "@/lib/models/asset";
+import { Asset } from "@/lib/models";
 import { AssetList, UploadForm } from "@/lib/components";
 
 const UploadPage: React.FC = () => {
@@ -23,7 +23,6 @@ const UploadPage: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    debugger;
     if (companyId) {
       fetch(`/api/assets?companyId=${companyId}`)
         .then((response) => response.json())
