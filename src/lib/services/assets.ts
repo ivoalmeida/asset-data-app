@@ -1,63 +1,32 @@
-import { PrismaClient } from "@prisma/client";
 import { Asset } from "@/lib/models";
+import { generateUUID } from "@/lib/utils";
+import fs from "fs";
 
-const prisma = new PrismaClient();
+const filePath =  "assets.json";
 
-export async function create(assets: Omit<Asset, "id" | "company">[]) {
-  await createCompanyIfNoneExist(assets?.[0].companyId);
-
-  const result = await handler(prisma.asset.createMany, {
-    data: assets,
-  });
-  return result;
-}
-
-async function createCompanyIfNoneExist(companyId: string) {
-  const companyExists = await handler(prisma.company.findUnique, {
-    where: { id: companyId },
-  });
-
-  if (!companyExists) {
-    await handler(prisma.company.create, { data: { id: companyId } });
+export function create(assets: Asset[]) {
+  const data = assets.map((asset) => ({
+    ...asset,
+    id: generateUUID(),
+  }));
+  let existingData: Asset[] = [];
+  if (fs.existsSync(filePath)) {
+    const fileContent = fs.readFileSync(filePath, "utf-8");
+    existingData = JSON.parse(fileContent);
   }
+  const newData = [...existingData, ...data];
+  fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
 }
 
-export async function findAll() {
-  const assets = await handler(prisma.asset.findMany, {
-    include: {
-      company: true,
-    },
-  });
-  return assets;
+export function findAll(): Asset[] {
+  if (!fs.existsSync(filePath)) {
+    return [];
+  }
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  return JSON.parse(fileContent);
 }
 
-export async function findByCompanyId(companyId: string) {
-  const assets = await handler(prisma.asset.findMany, {
-    include: {
-      company: true,
-    },
-    where: {
-      companyId,
-    },
-  });
-  return assets;
-}
-
-export async function handler<TInput, TOutput>(
-  cb: (data: TInput) => Promise<TOutput>,
-  data: TInput
-) {
-  return new Promise((resolve, reject) => {
-    cb(data)
-      .then(async (result: TOutput) => {
-        resolve(result);
-        await prisma.$disconnect();
-      })
-      .catch(async (e) => {
-        console.error(e);
-        await prisma.$disconnect();
-        reject(e);
-        process.exit(1);
-      });
-  });
+export function findByCompanyId(companyId: string) {
+  const data = findAll();
+  return data.filter((asset) => asset.companyId === companyId);
 }

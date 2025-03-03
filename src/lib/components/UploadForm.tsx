@@ -47,6 +47,7 @@ export const UploadForm: React.FC<Props> = ({ isOpen, onClose }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataWithCompanyId),
       });
+      onClose();
     } else {
       alert("No file selected");
     }
