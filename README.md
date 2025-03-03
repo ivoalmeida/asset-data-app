@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
 
 ## Getting Started
 
@@ -6,31 +6,28 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Solution
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* The SPA and backend were implemented using next js v15. 
+* The endpoints in nextjs need to live in ```pages/api``` and all POST and GET endpoints are ```/api/assets```.
+* I decided to save the uploaded file contents to a file named ```assets.json``` which will be created at the root of the project. 
+* Also decided to append records to the file instead of overwriting them or creating files per company id.
 
-## Learn More
+## Scalability & Extension Notes
 
-To learn more about Next.js, take a look at the following resources:
+* To handle large file uploads I think I would start with a streaming approach, so instead of loading the entire file into memory, I'd use some streaming library to process the file in chunks. This woould reduce memory usage and latency.
+* For multiple companies (100+) upload files simultaneously, I'd use a load balancer and multiple servers, or k8s with HPA to automatically scale the number of replicas based on CPU usage or custom metrics, or implement a message queue to buffer incoming requests and allow services to process them at a slower rate.
+* Regarding geocoding data I cannot really say much as I have no experience with it whatsoever, but if I have to guess I would store partial data in a separate table/collection and only when I have all the data I would store in its intended destination.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
