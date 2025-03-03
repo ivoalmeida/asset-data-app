@@ -65,3 +65,16 @@ h6 {
   margin: 4px 2px;
   cursor: pointer;
 }
+
+button {
+  background-color: #fff;
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}

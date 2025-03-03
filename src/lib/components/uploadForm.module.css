@@ -1,0 +1,39 @@
+.page {
+  padding: 1.2em;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.footer,
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.close {
+  align-self: baseline;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border: none;
+  color: #000;
+}
+
+.form {
+  display: flex;
+  gap: 0.8em;
+  flex-direction: column;
+  padding: 1.2em;
+
+  label {
+    font-weight: bold;
+    display: flex;
+    gap: 0.8em;
+  }
+
+  button {
+    align-self: flex-start;
+  }
+}

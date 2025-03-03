@@ -2,9 +2,14 @@
 import React from "react";
 import { Asset } from "@/lib/models/asset";
 import { readCsvFile, readJsonFile } from "@/lib/utils";
-import styles from "./upload.module.css";
+import styles from "./uploadForm.module.css";
 
-const UploadPage: React.FC = () => {
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export const UploadForm: React.FC<Props> = ({ isOpen, onClose }) => {
   const [data, setData] = React.useState<Asset[]>();
   const [companyId, setcompanyId] = React.useState("");
 
@@ -50,8 +55,11 @@ const UploadPage: React.FC = () => {
   };
 
   return (
-    <div className={styles.page}>
-      <h1>Upload assets file</h1>
+    <dialog className={styles.page} open={isOpen}>
+      <header className={styles.header}>
+        <h2>Upload assets file</h2>
+        <button className={styles.close} onClick={onClose}>X</button>
+      </header>
       <form
         className={styles.form}
         onSubmit={handleSubmit}
@@ -61,7 +69,7 @@ const UploadPage: React.FC = () => {
         <label htmlFor="companyId">
           Company Id:
           <input
-            name="companyId"
+            id="companyId"
             onChange={handleCompanyId}
             type="text"
             placeholder="Company Id"
@@ -70,18 +78,21 @@ const UploadPage: React.FC = () => {
         <label htmlFor="file">
           Upload a file:
           <input
-            name="file"
+            id="file"
             type="file"
             accept=".json,.csv"
             onChange={handleFileChange}
           />
         </label>
-        <button className="button" type="submit">
-          Upload
-        </button>
+        <div className={styles.footer}>
+          <button type="reset" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="button" type="submit">
+            Upload
+          </button>
+        </div>
       </form>
-    </div>
+    </dialog>
   );
 };
-
-export default UploadPage;
