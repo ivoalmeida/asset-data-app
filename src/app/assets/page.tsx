@@ -1,39 +1,24 @@
-import { Asset } from "@/lib/models/asset";
+'use client';
 import React from "react";
-
-async function getAssetData() {
-  const response = await fetch("/api/assets");
-  const data = await response.json();
-  return data;
-}
+import styles from './page.module.css';
+import { Asset } from "@/lib/models/asset";
+import {AssetList, AddAsset} from '@/lib/components';
 
 const UploadPage: React.FC = () => {
   const [assets, setAssets] = React.useState<Asset[]>();
 
   React.useEffect(() => {
-    getAssetData().then((data) => setAssets(data));
+    fetch('/api/assets')
+      .then((response) => response.json())
+      .then((data) => setAssets(data))
+      .catch((error) => console.error('Error fetching assets:', error));
   }, []);
+
   return (
-    <div>
+    <div className={styles.page}>
       <h1>Assets list</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Address</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-          </tr>
-        </thead>
-        <tbody>
-          {assets?.map((asset: Asset) => (
-            <tr key={asset.address}>
-              <td>{asset.address}</td>
-              <td>{asset.latitude}</td>
-              <td>{asset.longitude}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <AddAsset />
+      <AssetList assets={assets} />
     </div>
   );
 };

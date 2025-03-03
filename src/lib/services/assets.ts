@@ -3,22 +3,27 @@ import { Asset } from "@/lib/models/asset";
 
 const prisma = new PrismaClient();
 
-export async function create({ address, company, latitude, longitude }: Asset) {
-  const user = await prisma.asset.create({
-    data: {
-      address,
-      latitude,
-      longitude,
-      company: {
-        connect: { id: company.id },
-      },
-    },
+export async function create(assets: Omit<Asset, "id" | "company">[]) {
+  await createCompanyIfNoneExist(assets?.[0].companyId);
+
+  const result = await handler(prisma.asset.createMany, {
+    data: assets,
   });
-  return user;
+  return result;
+}
+
+async function createCompanyIfNoneExist(companyId: string) {
+  const companyExists = await handler(prisma.company.findUnique, {
+    where: { id: companyId },
+  });
+
+  if (!companyExists) {
+    await handler(prisma.company.create, { data: { id: companyId } });
+  }
 }
 
 export async function findAll() {
-  const assets = await prisma.asset.findMany({
+  const assets = await handler(prisma.asset.findMany, {
     include: {
       company: true,
     },
@@ -26,8 +31,8 @@ export async function findAll() {
   return assets;
 }
 
-export async function findByCompanyId(companyId: number) {
-  const assets = await prisma.asset.findMany({
+export async function findByCompanyId(companyId: string) {
+  const assets = await handler(prisma.asset.findMany, {
     include: {
       company: true,
     },
@@ -38,11 +43,7 @@ export async function findByCompanyId(companyId: number) {
   return assets;
 }
 
-export async function ddd(asset: Asset) {
-  return queryWrapper(create, asset);
-}
-
-export async function queryWrapper<TInput, TOutput>(
+export async function handler<TInput, TOutput>(
   cb: (data: TInput) => Promise<TOutput>,
   data: TInput
 ) {

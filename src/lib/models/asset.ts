@@ -1,11 +1,13 @@
 export type Asset = {
+  id: number;
   address: string;
   latitude: number;
   longitude: number;
-  company: Company;
+  company?: Company;
+  companyId: string;
 };
 
 export type Company = {
-  id: number;
-  assets: Asset[];
+  id: string;
+  assets?: Asset[];
 }

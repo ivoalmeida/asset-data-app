@@ -1,0 +1,21 @@
+.page {
+    padding: 1.2em;
+}
+
+.form {
+  display: flex;
+  gap: 0.8em;
+  flex-direction: column;
+  padding: 1.2em;
+  
+
+  label {
+    font-weight: bold;
+    display: flex;
+    gap: 0.8em;
+  }
+
+  button {
+    align-self: flex-start;
+  }
+}
